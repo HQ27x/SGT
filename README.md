@@ -53,7 +53,7 @@ La aplicación está estructurada en varios módulos interconectados que cubren 
 
 Este proyecto ha sido desarrollado por el **Grupo N5**, integrado por:
 
+*   **Huayta Palma, Nelson Enrrique** ([orcid.org/0000-0002-0076-6693](https://orcid.org/0000-0002-0076-6693))
 *   **Dueñas Guzman, Carlos Delpiero** ([orcid.org/0009-0000-1567-1542](https://orcid.org/0009-0000-1567-1542))
-*   **Huayta Palma, Nelson Enrique** ([orcid.org/0000-0002-0076-6693](https://orcid.org/0000-0002-0076-6693))
 *   **Remigio Ramirez, George Neffer** ([orcid.org/0000-0002-7269-5927](https://orcid.org/0000-0002-7269-5927))
 *   **Rojas Flores, Miguel Sebastian** ([orcid.org/0000-0002-6287-5369](https://orcid.org/0000-0002-6287-5369))
