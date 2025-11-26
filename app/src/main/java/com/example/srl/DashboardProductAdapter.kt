@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 
 /**
  * Adaptador para el RecyclerView que muestra la lista de productos en el dashboard.
@@ -34,10 +36,11 @@ class DashboardProductAdapter(private val productList: List<Product>) : Recycler
         holder.productPrice.text = "Precio S/.${currentItem.price}"
 
         // Resaltar el producto si el stock es bajo
+        val context = holder.itemView.context
         if (currentItem.quantity <= 5) {
-            holder.productName.setTextColor(Color.RED)
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorLowStock))
         } else {
-            holder.productName.setTextColor(holder.defaultTextColor)
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSurface))
         }
     }
 
@@ -52,6 +55,5 @@ class DashboardProductAdapter(private val productList: List<Product>) : Recycler
         val productName: TextView = itemView.findViewById(R.id.product_name)
         val productQuantity: TextView = itemView.findViewById(R.id.product_quantity)
         val productPrice: TextView = itemView.findViewById(R.id.product_price)
-        val defaultTextColor: ColorStateList = productName.textColors // Guardar el color de texto por defecto
     }
 }

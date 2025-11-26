@@ -53,6 +53,20 @@ dependencies {
 
     // Dependencia que ya tenías:
     implementation("com.google.firebase:firebase-analytics")
+
+    // ----------------------------------------------------
+    // DEPENDENCIAS DE CAMERAX Y ML KIT
+    // ----------------------------------------------------
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("androidx.camera:camera-core:1.3.0")
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
+
+    // ----------------------------------------------------
+    // GRAFICOS (MPAndroidChart)
+    // ----------------------------------------------------
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

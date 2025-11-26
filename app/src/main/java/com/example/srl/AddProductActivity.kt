@@ -1,13 +1,16 @@
 package com.example.srl
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +21,8 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
 
     // Elementos de la interfaz de usuario
+    private lateinit var barcodeEditText: EditText
+    private lateinit var scanBarcodeButton: ImageButton
     private lateinit var nameEditText: EditText
     private lateinit var categorySpinner: Spinner
     private lateinit var quantityEditText: EditText
@@ -25,6 +30,19 @@ class AddProductActivity : AppCompatActivity() {
 
     // Lista de datos
     private val categoryList = mutableListOf<String>()
+
+    // Lanzador para la actividad de escaneo de código de barras
+    private val scanBarcodeLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val scannedBarcode = result.data?.getStringExtra("SCANNED_BARCODE")
+            if (!scannedBarcode.isNullOrEmpty()) {
+                barcodeEditText.setText(scannedBarcode)
+                Toast.makeText(this, "Código escaneado: $scannedBarcode", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     /**
      * Esta función se llama cuando la actividad se crea por primera vez.
@@ -37,6 +55,8 @@ class AddProductActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
         // Inicializar elementos de la interfaz de usuario
+        barcodeEditText = findViewById(R.id.edit_text_barcode)
+        scanBarcodeButton = findViewById(R.id.scan_barcode_button)
         nameEditText = findViewById(R.id.edit_text_name)
         categorySpinner = findViewById(R.id.category_spinner)
         quantityEditText = findViewById(R.id.edit_text_quantity)
@@ -44,22 +64,30 @@ class AddProductActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.button_save)
         val cancelButton = findViewById<Button>(R.id.button_cancel)
 
+        // Configurar el botón de escaneo de código de barras
+        scanBarcodeButton.setOnClickListener {
+            val intent = Intent(this, ScanBarcodeActivity::class.java)
+            scanBarcodeLauncher.launch(intent)
+        }
+
         // Configurar el Spinner de categorías
         setupCategorySpinner()
 
         // Configurar el botón de guardar
         saveButton.setOnClickListener {
+            val barcode = barcodeEditText.text.toString().trim()
             val name = nameEditText.text.toString().trim()
-            val category = categorySpinner.selectedItem.toString()
+            val category = categorySpinner.selectedItem?.toString() ?: ""
             val quantity = quantityEditText.text.toString().toIntOrNull()
             val price = priceEditText.text.toString().toDoubleOrNull()
 
-            // Validar que todos los campos estén rellenos
+            // Validar que todos los campos obligatorios estén rellenos
             if (name.isNotEmpty() && category.isNotEmpty() && quantity != null && price != null) {
-                val product = Product(name, category, quantity, price)
+                // El código de barras es opcional, pero si se escanea se guarda
+                val product = Product(name, category, quantity, price, barcode)
                 saveProduct(product)
             } else {
-                Toast.makeText(this, "Por favor, rellena todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor, rellena todos los campos obligatorios", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -79,6 +107,7 @@ class AddProductActivity : AppCompatActivity() {
         firestore.collection("categories")
             .get()
             .addOnSuccessListener { snapshots ->
+                categoryList.clear()
                 for (document in snapshots) {
                     val category = document.toObject(Category::class.java)
                     categoryList.add(category.name)
@@ -113,9 +142,11 @@ class AddProductActivity : AppCompatActivity() {
      * Limpia los campos del formulario después de guardar un producto.
      */
     private fun clearForm() {
+        barcodeEditText.text.clear()
         nameEditText.text.clear()
         quantityEditText.text.clear()
         priceEditText.text.clear()
+        // Opcional: resetear el spinner a la primera posición si se desea
     }
 
     /**

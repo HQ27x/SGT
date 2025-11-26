@@ -1,6 +1,8 @@
 package com.example.srl
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,17 +11,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -40,10 +49,25 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var totalProductsText: TextView
     private lateinit var loadingSpinner: ProgressBar
     private lateinit var contentScrollView: ScrollView
+    private lateinit var pieChart: PieChart
+    private lateinit var searchEditText: EditText
+    private lateinit var scanBarcodeButton: ImageButton
 
     // Listas de datos
     private val productList = mutableListOf<Product>() // Lista completa de productos de Firestore
     private val filteredProductList = mutableListOf<Product>() // Lista de productos a mostrar después de filtrar
+
+    // Lanzador para la actividad de escaneo de código de barras
+    private val scanBarcodeLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val scannedBarcode = result.data?.getStringExtra("SCANNED_BARCODE")
+            if (!scannedBarcode.isNullOrEmpty()) {
+                searchEditText.setText(scannedBarcode)
+            }
+        }
+    }
 
     /**
      * Esta función se llama cuando la actividad se crea por primera vez.
@@ -61,8 +85,11 @@ class DashboardActivity : AppCompatActivity() {
         totalProductsText = findViewById(R.id.total_products_text)
         loadingSpinner = findViewById(R.id.loading_spinner)
         contentScrollView = findViewById(R.id.content_scroll_view)
+        pieChart = findViewById(R.id.category_pie_chart)
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
+        searchEditText = findViewById(R.id.search_edit_text)
+        scanBarcodeButton = findViewById(R.id.scan_barcode_button)
 
         // Configurar el icono de la hamburguesa para abrir el menú lateral
         val menuIcon: ImageView = findViewById(R.id.menu_icon)
@@ -104,7 +131,6 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         // Configurar la barra de búsqueda para filtrar productos en tiempo real
-        val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -115,11 +141,72 @@ class DashboardActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // Configurar el botón de escaneo
+        scanBarcodeButton.setOnClickListener {
+            val intent = Intent(this, ScanBarcodeActivity::class.java)
+            scanBarcodeLauncher.launch(intent)
+        }
+
+        // Configurar el gráfico de pastel
+        setupPieChart()
+
         // Configurar la navegación inferior
         setupBottomNavigation()
 
         // Obtener los productos de Firestore
         fetchProducts()
+    }
+
+    /**
+     * Configura el estilo inicial del gráfico de pastel.
+     */
+    private fun setupPieChart() {
+        pieChart.isDrawHoleEnabled = true
+        pieChart.setUsePercentValues(true)
+        pieChart.setEntryLabelTextSize(12f)
+        pieChart.setEntryLabelColor(Color.BLACK)
+        pieChart.centerText = "Categorías"
+        pieChart.setCenterTextSize(16f)
+        pieChart.description.isEnabled = false
+        
+        val legend = pieChart.legend
+        legend.isEnabled = false // Ocultamos la leyenda para que se vea más limpio
+    }
+
+    /**
+     * Carga los datos en el gráfico de pastel basándose en la lista de productos.
+     */
+    private fun loadPieChartData() {
+        val categoryMap = HashMap<String, Int>()
+
+        // Contar productos por categoría
+        for (product in productList) {
+            val category = if (product.category.isNotEmpty()) product.category else "Sin Categoría"
+            categoryMap[category] = categoryMap.getOrDefault(category, 0) + 1
+        }
+
+        val entries = ArrayList<PieEntry>()
+        for ((category, count) in categoryMap) {
+            entries.add(PieEntry(count.toFloat(), category))
+        }
+
+        val colors = ArrayList<Int>()
+        for (color in ColorTemplate.MATERIAL_COLORS) {
+            colors.add(color)
+        }
+        for (color in ColorTemplate.VORDIPLOM_COLORS) {
+            colors.add(color)
+        }
+
+        val dataSet = PieDataSet(entries, "Categorías")
+        dataSet.colors = colors
+        dataSet.valueTextSize = 12f
+        dataSet.valueTextColor = Color.BLACK
+
+        val data = PieData(dataSet)
+        pieChart.data = data
+        pieChart.invalidate() // Refrescar el gráfico
+        pieChart.animateY(1400) // Animación
     }
 
     /**
@@ -157,6 +244,7 @@ class DashboardActivity : AppCompatActivity() {
                     productList.add(product)
                 }
                 updateDashboardStats()
+                loadPieChartData() // Actualizar el gráfico con los nuevos datos
                 filterProducts("") // Mostrar todos los productos inicialmente
             }
     }
@@ -181,7 +269,7 @@ class DashboardActivity : AppCompatActivity() {
             filteredProductList.addAll(productList)
         } else {
             for (product in productList) {
-                if (product.name.contains(query, ignoreCase = true)) {
+                if (product.name.contains(query, ignoreCase = true) || product.barcode == query) {
                     filteredProductList.add(product)
                 }
             }

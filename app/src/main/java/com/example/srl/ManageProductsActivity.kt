@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +24,8 @@ class ManageProductsActivity : AppCompatActivity() {
     // Elementos de la interfaz de usuario
     private lateinit var productsRecyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var loadingSpinner: ProgressBar
+    private lateinit var emptyStateView: LinearLayout
 
     // Lista de datos
     private val productList = mutableListOf<Product>()
@@ -48,6 +53,8 @@ class ManageProductsActivity : AppCompatActivity() {
         // Configurar el RecyclerView
         productsRecyclerView = findViewById(R.id.products_recycler_view)
         productsRecyclerView.layoutManager = LinearLayoutManager(this)
+        loadingSpinner = findViewById(R.id.loading_spinner)
+        emptyStateView = findViewById(R.id.empty_state_view)
 
         // Configurar el botón para añadir un nuevo producto
         val addProductButton: Button = findViewById(R.id.add_product_button)
@@ -67,8 +74,14 @@ class ManageProductsActivity : AppCompatActivity() {
      * Obtiene la lista de productos de Firestore en tiempo real.
      */
     private fun fetchProducts() {
+        loadingSpinner.visibility = View.VISIBLE
+        productsRecyclerView.visibility = View.GONE
+        emptyStateView.visibility = View.GONE
+
         firestore.collection("products")
             .addSnapshotListener { snapshots, e ->
+                loadingSpinner.visibility = View.GONE
+
                 if (e != null) {
                     Log.w("ManageProductsActivity", "Error al obtener los documentos: ", e)
                     Toast.makeText(this, "Error al cargar los productos", Toast.LENGTH_SHORT).show()
@@ -83,18 +96,26 @@ class ManageProductsActivity : AppCompatActivity() {
                     productList.add(product)
                 }
 
-                // Inicializar el adaptador si no lo está, o notificar los cambios si ya existe
-                if (!::productAdapter.isInitialized) {
-                    productAdapter = ProductAdapter(
-                        productList,
-                        onDeleteClicked = { productId -> showDeleteConfirmation(productId) },
-                        onEditClicked = { product -> editProduct(product) },
-                        onAddClicked = { product -> addProductQuantity(product) },
-                        onRemoveClicked = { product -> removeProductQuantity(product) }
-                    )
-                    productsRecyclerView.adapter = productAdapter
+                if (productList.isEmpty()) {
+                    productsRecyclerView.visibility = View.GONE
+                    emptyStateView.visibility = View.VISIBLE
                 } else {
-                    productAdapter.notifyDataSetChanged()
+                    productsRecyclerView.visibility = View.VISIBLE
+                    emptyStateView.visibility = View.GONE
+
+                    // Inicializar el adaptador si no lo está, o notificar los cambios si ya existe
+                    if (!::productAdapter.isInitialized) {
+                        productAdapter = ProductAdapter(
+                            productList,
+                            onDeleteClicked = { productId -> showDeleteConfirmation(productId) },
+                            onEditClicked = { product -> editProduct(product) },
+                            onAddClicked = { product -> addProductQuantity(product) },
+                            onRemoveClicked = { product -> removeProductQuantity(product) }
+                        )
+                        productsRecyclerView.adapter = productAdapter
+                    } else {
+                        productAdapter.notifyDataSetChanged()
+                    }
                 }
             }
     }
