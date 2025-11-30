@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/dashboard"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Perfil de Usuario</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Información de la Cuenta</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            <ion-item>
+                <ion-label>
+                    <h2>Correo Electrónico</h2>
+                    <p>{{ userEmail }}</p>
+                </ion-label>
+            </ion-item>
+
+            <div class="button-group">
+                <ion-button expand="block" color="warning" (click)="resetPassword()">
+                    Restablecer Contraseña
+                </ion-button>
+
+                <ion-button expand="block" color="danger" (click)="logout()">
+                    Cerrar Sesión
+                </ion-button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,165 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+
+    p {
+        margin-top: 16px;
+        color: var(--ion-color-medium);
+        font-size: 1rem;
+    }
+}
+
+/* Enhanced Category List Items */
+ion-list {
+    background: transparent;
+    padding: 0;
+}
+
+ion-item {
+    --background: var(--ion-background-color);
+    --border-radius: var(--border-radius-md);
+    --padding-start: 20px;
+    --padding-end: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border-left: 4px solid var(--ion-color-primary);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--gradient-primary);
+        transition: width var(--transition-normal);
+    }
+
+    &:hover {
+        --background: var(--ion-color-light);
+        transform: translateX(8px);
+        box-shadow: var(--shadow-md);
+
+        &::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+    }
+
+    ion-label {
+        margin: 16px 0;
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--ion-color-dark);
+            letter-spacing: 0.3px;
+        }
+    }
+}
+
+/* Category Icon Styling */
+.category-icon {
+    font-size: 2rem;
+    color: var(--ion-color-primary);
+    margin-right: 12px;
+    filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+}
+
+/* Action Buttons Enhancement */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+
+    ion-button {
+        --padding-start: 14px;
+        --padding-end: 14px;
+        --border-radius: var(--border-radius-sm);
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        &::part(native) {
+            transition: all var(--transition-fast);
+        }
+
+        &:hover {
+            transform: scale(1.08);
+        }
+
+        &[color="primary"] {
+            --background: var(--ion-color-primary);
+        }
+
+        &[color="danger"] {
+            --background: var(--ion-color-danger);
+        }
+    }
+}
+
+/* Empty State Enhancement */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.5s ease-out;
+
+    p {
+        color: var(--ion-color-medium);
+        margin-bottom: 24px;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+}
+
+/* Add Button Enhancement */
+.add-button {
+    margin-top: 24px;
+    --border-radius: var(--border-radius-md);
+    --box-shadow: var(--shadow-md);
+    --background: var(--gradient-primary);
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+
+    &:hover {
+        transform: translateY(-3px);
+        --box-shadow: var(--shadow-lg);
+    }
+}
+
+/* Toolbar Enhancement */
+ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Category count badge (if added in future) */
+.category-count {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+}

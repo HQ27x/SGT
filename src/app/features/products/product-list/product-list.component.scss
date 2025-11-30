@@ -1,0 +1,136 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+
+    p {
+        margin-top: 16px;
+        color: var(--ion-color-medium);
+        font-size: 1rem;
+    }
+}
+
+/* Enhanced Product List Items */
+ion-list {
+    background: transparent;
+    padding: 0;
+}
+
+ion-item {
+    --background: var(--ion-background-color);
+    --border-radius: var(--border-radius-md);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border-left: 4px solid transparent;
+
+    &:hover {
+        --background: var(--ion-color-light);
+        transform: translateX(6px);
+        box-shadow: var(--shadow-md);
+        border-left-color: var(--ion-color-primary);
+    }
+
+    ion-label {
+        margin: 14px 0;
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 6px;
+            color: var(--ion-color-dark);
+        }
+
+        p {
+            color: var(--ion-color-medium);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    }
+
+    ion-badge {
+        font-size: 0.95rem;
+        padding: 8px 16px;
+        border-radius: var(--border-radius-sm);
+        font-weight: 700;
+        box-shadow: var(--shadow-sm);
+    }
+}
+
+/* Action Buttons Enhancement */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    ion-button {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --border-radius: var(--border-radius-sm);
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        &::part(native) {
+            transition: all var(--transition-fast);
+        }
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+/* Empty State Enhancement */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.5s ease-out;
+
+    p {
+        color: var(--ion-color-medium);
+        margin-bottom: 24px;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    ion-button {
+        --border-radius: var(--border-radius-md);
+        --box-shadow: var(--shadow-md);
+        font-weight: 700;
+    }
+}
+
+/* Floating Action Button */
+ion-fab-button {
+    --background: var(--gradient-primary);
+    --box-shadow: var(--shadow-xl);
+
+    &:hover {
+        transform: scale(1.15) rotate(90deg);
+    }
+}
+
+/* Toolbar Enhancement */
+ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,62 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/login"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Crear Cuenta</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <div class="register-container">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Registro</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <form (ngSubmit)="onRegister()">
+                    <ion-item>
+                        <ion-label position="floating">Correo Electrónico</ion-label>
+                        <ion-input type="email" [(ngModel)]="email" name="email" required autocomplete="email">
+                        </ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="floating">Contraseña</ion-label>
+                        <ion-input type="password" [(ngModel)]="password" name="password" required
+                            autocomplete="new-password">
+                        </ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="floating">Confirmar Contraseña</ion-label>
+                        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required
+                            autocomplete="new-password">
+                        </ion-input>
+                    </ion-item>
+
+                    <div class="error-message" *ngIf="errorMessage">
+                        <ion-text color="danger">
+                            <p>{{ errorMessage }}</p>
+                        </ion-text>
+                    </div>
+
+                    <ion-button expand="block" type="submit" [disabled]="loading" class="register-button">
+                        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+                        <span *ngIf="!loading">Crear Cuenta</span>
+                    </ion-button>
+
+                    <div class="login-link">
+                        <ion-text>
+                            <p>
+                                ¿Ya tienes una cuenta?
+                                <a (click)="goToLogin()">Inicia sesión aquí</a>
+                            </p>
+                        </ion-text>
+                    </div>
+                </form>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

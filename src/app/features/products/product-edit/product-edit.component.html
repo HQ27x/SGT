@@ -1,0 +1,57 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/products"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Editar Producto</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <div *ngIf="loadingData" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando producto...</p>
+    </div>
+
+    <form *ngIf="!loadingData" (ngSubmit)="onSubmit()">
+        <ion-item>
+            <ion-label position="floating">Nombre del Producto *</ion-label>
+            <ion-input [(ngModel)]="product.name" name="name" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Categoría *</ion-label>
+            <ion-select [(ngModel)]="product.category" name="category" placeholder="Selecciona una categoría">
+                <ion-select-option *ngFor="let category of categories" [value]="category.name">
+                    {{ category.name }}
+                </ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Cantidad *</ion-label>
+            <ion-input type="number" [(ngModel)]="product.quantity" name="quantity" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Precio *</ion-label>
+            <ion-input type="number" [(ngModel)]="product.price" name="price" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Código de Barras (Opcional)</ion-label>
+            <ion-input [(ngModel)]="product.barcode" name="barcode"></ion-input>
+        </ion-item>
+
+        <div class="button-group">
+            <ion-button expand="block" type="submit" [disabled]="loading">
+                <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+                <span *ngIf="!loading">Actualizar Producto</span>
+            </ion-button>
+
+            <ion-button expand="block" color="medium" (click)="cancel()" [disabled]="loading">
+                Cancelar
+            </ion-button>
+        </div>
+    </form>
+</ion-content>

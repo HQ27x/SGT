@@ -1,0 +1,11 @@
+.button-group {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+}

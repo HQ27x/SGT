@@ -1,0 +1,57 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/dashboard"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Gestión de Productos</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <div *ngIf="loading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando productos...</p>
+    </div>
+
+    <div *ngIf="!loading">
+        <ion-list *ngIf="products.length > 0">
+            <ion-item *ngFor="let product of products">
+                <ion-label>
+                    <h2>{{ product.name }}</h2>
+                    <p>Categoría: {{ product.category }}</p>
+                    <p>Precio: ${{ product.price }}</p>
+                    <p>Cantidad: {{ product.quantity }} unidades</p>
+                    <p *ngIf="product.barcode">Código: {{ product.barcode }}</p>
+                </ion-label>
+
+                <div class="action-buttons" slot="end">
+                    <ion-button size="small" (click)="decrementQuantity(product)">
+                        <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                    <ion-button size="small" (click)="incrementQuantity(product)">
+                        <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                    <ion-button size="small" color="warning" (click)="editProduct(product)">
+                        <ion-icon slot="icon-only" name="create"></ion-icon>
+                    </ion-button>
+                    <ion-button size="small" color="danger" (click)="deleteProduct(product)">
+                        <ion-icon slot="icon-only" name="trash"></ion-icon>
+                    </ion-button>
+                </div>
+            </ion-item>
+        </ion-list>
+
+        <div *ngIf="products.length === 0" class="empty-state">
+            <p>No hay productos registrados</p>
+            <ion-button (click)="goToAddProduct()">
+                Añadir Primer Producto
+            </ion-button>
+        </div>
+    </div>
+
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button (click)="goToAddProduct()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>
