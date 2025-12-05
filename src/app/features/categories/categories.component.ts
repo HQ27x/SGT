@@ -70,10 +70,12 @@ export class CategoriesComponent implements OnInit {
                     handler: async (data: any) => {
                         if (data.name && data.name.trim()) {
                             try {
+                                console.log('Adding category:', data.name.trim());
                                 await this.categoryService.addCategory({ name: data.name.trim() });
                                 await this.showToast('Categoría añadida exitosamente', 'success');
                             } catch (error: any) {
-                                await this.showToast('Error al añadir categoría', 'danger');
+                                console.error('Error adding category:', error);
+                                await this.showToast(`Error al añadir categoría: ${error.message || 'Error desconocido'}`, 'danger');
                             }
                         } else {
                             await this.showToast('El nombre no puede estar vacío', 'warning');

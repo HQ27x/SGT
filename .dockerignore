@@ -1,0 +1,10 @@
+node_modules
+dist
+www
+.git
+.gitignore
+android
+ios
+coverage
+.angular
+.vscode

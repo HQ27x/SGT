@@ -33,8 +33,8 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import '@ionic/angular/css/palettes/dark.class.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
 
 /**
  * Custom Global Styles
@@ -251,4 +251,14 @@ ion-grid {
 
 ion-col {
     padding: 8px;
+}
+
+/* Ensure content uses theme background */
+ion-content {
+    --background: var(--ion-background-color);
+}
+
+/* Dark mode specific overrides */
+.dark ion-content {
+    --background: var(--ion-background-color);
 }

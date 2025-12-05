@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, addDoc, updateDoc, deleteDoc, docData } from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category.model';
 
@@ -7,23 +7,51 @@ import { Category } from '../models/category.model';
     providedIn: 'root'
 })
 export class CategoryService {
-    private categoriesCollection = collection(this.firestore, 'categories');
-
     constructor(private firestore: Firestore) { }
 
     /**
      * Obtiene todas las categorías en tiempo real
      */
     getCategories(): Observable<Category[]> {
-        return collectionData(this.categoriesCollection, { idField: 'id' }) as Observable<Category[]>;
+        return new Observable(observer => {
+            const categoriesRef = collection(this.firestore, 'categories');
+            const unsubscribe = onSnapshot(categoriesRef,
+                (snapshot) => {
+                    const categories: Category[] = [];
+                    snapshot.forEach((doc) => {
+                        categories.push({ id: doc.id, ...doc.data() } as Category);
+                    });
+                    observer.next(categories);
+                },
+                (error) => {
+                    console.error('Error in getCategories:', error);
+                    observer.error(error);
+                }
+            );
+            return () => unsubscribe();
+        });
     }
 
     /**
      * Obtiene una categoría por ID
      */
     getCategory(id: string): Observable<Category> {
-        const categoryDoc = doc(this.firestore, `categories/${id}`);
-        return docData(categoryDoc, { idField: 'id' }) as Observable<Category>;
+        return new Observable(observer => {
+            const categoryDoc = doc(this.firestore, `categories/${id}`);
+            const unsubscribe = onSnapshot(categoryDoc,
+                (snapshot) => {
+                    if (snapshot.exists()) {
+                        observer.next({ id: snapshot.id, ...snapshot.data() } as Category);
+                    } else {
+                        observer.error(new Error('Category not found'));
+                    }
+                },
+                (error) => {
+                    observer.error(error);
+                }
+            );
+            return () => unsubscribe();
+        });
     }
 
     /**
@@ -31,9 +59,17 @@ export class CategoryService {
      */
     async addCategory(category: Category): Promise<any> {
         try {
-            const result = await addDoc(this.categoriesCollection, { name: category.name });
+            console.log('Attempting to add category:', category);
+            const categoryData = {
+                name: category.name,
+                createdAt: new Date().toISOString()
+            };
+            const categoriesRef = collection(this.firestore, 'categories');
+            const result = await addDoc(categoriesRef, categoryData);
+            console.log('Category added successfully:', result.id);
             return result;
         } catch (error) {
+            console.error('Error adding category:', error);
             throw error;
         }
     }

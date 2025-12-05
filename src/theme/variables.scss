@@ -1,83 +1,179 @@
 // Ionic Variables and Theming. For more info, please see:
 // https://ionicframework.com/docs/theming/
 
-/** Custom Color Palette **/
+/** Inventory App - Professional Color Palette **/
 :root {
-    /** Primary Colors - Vibrant Blue-Purple Gradient **/
-    --ion-color-primary: #667eea;
-    --ion-color-primary-rgb: 102, 126, 234;
+    /** Primary Colors - Categories (Purple/Violet) **/
+    --ion-color-primary: #7C3AED;
+    --ion-color-primary-rgb: 124, 58, 237;
     --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #5a6fce;
-    --ion-color-primary-tint: #7e95f2;
+    --ion-color-primary-shade: #6D28D9;
+    --ion-color-primary-tint: #8B5CF6;
 
-    /** Secondary Colors - Purple Accent **/
-    --ion-color-secondary: #764ba2;
-    --ion-color-secondary-rgb: 118, 75, 162;
+    /** Secondary Colors - Products (Teal) **/
+    --ion-color-secondary: #14B8A6;
+    --ion-color-secondary-rgb: 20, 184, 166;
     --ion-color-secondary-contrast: #ffffff;
     --ion-color-secondary-contrast-rgb: 255, 255, 255;
-    --ion-color-secondary-shade: #68428f;
-    --ion-color-secondary-tint: #8460ab;
+    --ion-color-secondary-shade: #0F766E;
+    --ion-color-secondary-tint: #2DD4BF;
 
-    /** Tertiary Colors - Cyan Accent **/
-    --ion-color-tertiary: #4facfe;
-    --ion-color-tertiary-rgb: 79, 172, 254;
+    /** Tertiary Colors - Dashboard (Indigo) **/
+    --ion-color-tertiary: #4F46E5;
+    --ion-color-tertiary-rgb: 79, 70, 229;
     --ion-color-tertiary-contrast: #ffffff;
     --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-    --ion-color-tertiary-shade: #4597e0;
-    --ion-color-tertiary-tint: #61b4fe;
+    --ion-color-tertiary-shade: #4338CA;
+    --ion-color-tertiary-tint: #6366F1;
 
-    /** Success **/
-    --ion-color-success: #10dc60;
-    --ion-color-success-rgb: 16, 220, 96;
+    /** Success (Green) **/
+    --ion-color-success: #10B981;
+    --ion-color-success-rgb: 16, 185, 129;
     --ion-color-success-contrast: #ffffff;
     --ion-color-success-contrast-rgb: 255, 255, 255;
-    --ion-color-success-shade: #0ec254;
-    --ion-color-success-tint: #28e070;
+    --ion-color-success-shade: #059669;
+    --ion-color-success-tint: #34D399;
 
-    /** Warning **/
-    --ion-color-warning: #ffce00;
-    --ion-color-warning-rgb: 255, 206, 0;
+    /** Warning (Amber) **/
+    --ion-color-warning: #F59E0B;
+    --ion-color-warning-rgb: 245, 158, 11;
     --ion-color-warning-contrast: #000000;
     --ion-color-warning-contrast-rgb: 0, 0, 0;
-    --ion-color-warning-shade: #e0b500;
-    --ion-color-warning-tint: #ffd31a;
+    --ion-color-warning-shade: #D97706;
+    --ion-color-warning-tint: #FBBF24;
 
-    /** Danger **/
-    --ion-color-danger: #f04141;
-    --ion-color-danger-rgb: 240, 65, 65;
+    /** Danger (Red) **/
+    --ion-color-danger: #EF4444;
+    --ion-color-danger-rgb: 239, 68, 68;
     --ion-color-danger-contrast: #ffffff;
     --ion-color-danger-contrast-rgb: 255, 255, 255;
-    --ion-color-danger-shade: #d33939;
-    --ion-color-danger-tint: #f25454;
+    --ion-color-danger-shade: #DC2626;
+    --ion-color-danger-tint: #F87171;
 
-    /** Custom Design Variables **/
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    --gradient-danger: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    /** Light Mode - Backgrounds & Text **/
+    --ion-background-color: #FFFFFF;
+    --ion-background-color-rgb: 255, 255, 255;
+    --ion-text-color: #000000;
+    --ion-text-color-rgb: 0, 0, 0;
+    --ion-color-step-50: #FAFAFA;
+    --ion-color-step-100: #F5F5F5;
+    --ion-color-step-150: #EEEEEE;
+    --ion-color-step-200: #E0E0E0;
+    --ion-color-step-300: #BDBDBD;
+    --ion-color-step-400: #9E9E9E;
+    --ion-color-step-500: #757575;
+    --ion-color-step-600: #616161;
+    --ion-color-step-700: #424242;
+    --ion-color-step-800: #212121;
+    --ion-color-step-900: #000000;
 
+    /** Card backgrounds **/
+    --ion-card-background: #FFFFFF;
+    --ion-item-background: #FFFFFF;
+
+    /** Custom Gradients **/
+    --gradient-primary: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+    --gradient-secondary: linear-gradient(135deg, #14B8A6 0%, #2DD4BF 100%);
+    --gradient-tertiary: linear-gradient(135deg, #4F46E5 0%, #818CF8 100%);
+    --gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    --gradient-danger: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+
+    /** Shadows **/
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
     --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.18);
 
+    /** Border Radius **/
     --border-radius-sm: 8px;
     --border-radius-md: 12px;
     --border-radius-lg: 16px;
     --border-radius-xl: 24px;
 
+    /** Transitions **/
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
 
-/** Dark Mode Adjustments **/
-@media (prefers-color-scheme: dark) {
-    :root {
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-        --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.6);
-    }
+/** Dark Mode **/
+.dark {
+    /** Primary Colors - Categories (Light Purple) **/
+    --ion-color-primary: #A78BFA;
+    --ion-color-primary-rgb: 167, 139, 250;
+    --ion-color-primary-contrast: #1F2937;
+    --ion-color-primary-contrast-rgb: 31, 41, 55;
+    --ion-color-primary-shade: #8B5CF6;
+    --ion-color-primary-tint: #C4B5FD;
+
+    /** Secondary Colors - Products (Light Teal) **/
+    --ion-color-secondary: #2DD4BF;
+    --ion-color-secondary-rgb: 45, 212, 191;
+    --ion-color-secondary-contrast: #1F2937;
+    --ion-color-secondary-contrast-rgb: 31, 41, 55;
+    --ion-color-secondary-shade: #14B8A6;
+    --ion-color-secondary-tint: #5EEAD4;
+
+    /** Tertiary Colors - Dashboard (Light Indigo) **/
+    --ion-color-tertiary: #818CF8;
+    --ion-color-tertiary-rgb: 129, 140, 248;
+    --ion-color-tertiary-contrast: #1F2937;
+    --ion-color-tertiary-contrast-rgb: 31, 41, 55;
+    --ion-color-tertiary-shade: #6366F1;
+    --ion-color-tertiary-tint: #A5B4FC;
+
+    /** Success (Light Green) **/
+    --ion-color-success: #34D399;
+    --ion-color-success-rgb: 52, 211, 153;
+    --ion-color-success-contrast: #1F2937;
+    --ion-color-success-contrast-rgb: 31, 41, 55;
+    --ion-color-success-shade: #10B981;
+    --ion-color-success-tint: #6EE7B7;
+
+    /** Warning (Light Amber) **/
+    --ion-color-warning: #FBBF24;
+    --ion-color-warning-rgb: 251, 191, 36;
+    --ion-color-warning-contrast: #1F2937;
+    --ion-color-warning-contrast-rgb: 31, 41, 55;
+    --ion-color-warning-shade: #F59E0B;
+    --ion-color-warning-tint: #FCD34D;
+
+    /** Danger (Light Red) **/
+    --ion-color-danger: #F87171;
+    --ion-color-danger-rgb: 248, 113, 113;
+    --ion-color-danger-contrast: #1F2937;
+    --ion-color-danger-contrast-rgb: 31, 41, 55;
+    --ion-color-danger-shade: #EF4444;
+    --ion-color-danger-tint: #FCA5A5;
+
+    /** Dark Mode - Backgrounds & Text **/
+    --ion-background-color: #111827;
+    --ion-background-color-rgb: 17, 24, 39;
+    --ion-text-color: #F9FAFB;
+    --ion-text-color-rgb: 249, 250, 251;
+    --ion-color-step-50: #1F2937;
+    --ion-color-step-100: #374151;
+    --ion-color-step-150: #4B5563;
+    --ion-color-step-200: #6B7280;
+
+    /** Dark Mode Gradients **/
+    --gradient-primary: linear-gradient(135deg, #A78BFA 0%, #C4B5FD 100%);
+    --gradient-secondary: linear-gradient(135deg, #2DD4BF 0%, #5EEAD4 100%);
+    --gradient-tertiary: linear-gradient(135deg, #818CF8 0%, #A5B4FC 100%);
+    --gradient-success: linear-gradient(135deg, #34D399 0%, #6EE7B7 100%);
+    --gradient-danger: linear-gradient(135deg, #F87171 0%, #FCA5A5 100%);
+
+    /** Dark Mode Shadows **/
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+/** Smooth transitions for theme switching **/
+* {
+    transition: background-color var(--transition-normal),
+        color var(--transition-normal),
+        border-color var(--transition-normal);
 }

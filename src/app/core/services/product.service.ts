@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, addDoc, updateDoc, deleteDoc, docData } from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
 
@@ -7,23 +7,51 @@ import { Product } from '../models/product.model';
     providedIn: 'root'
 })
 export class ProductService {
-    private productsCollection = collection(this.firestore, 'products');
-
     constructor(private firestore: Firestore) { }
 
     /**
      * Obtiene todos los productos en tiempo real
      */
     getProducts(): Observable<Product[]> {
-        return collectionData(this.productsCollection, { idField: 'id' }) as Observable<Product[]>;
+        return new Observable(observer => {
+            const productsRef = collection(this.firestore, 'products');
+            const unsubscribe = onSnapshot(productsRef,
+                (snapshot) => {
+                    const products: Product[] = [];
+                    snapshot.forEach((doc) => {
+                        products.push({ id: doc.id, ...doc.data() } as Product);
+                    });
+                    observer.next(products);
+                },
+                (error) => {
+                    console.error('Error in getProducts:', error);
+                    observer.error(error);
+                }
+            );
+            return () => unsubscribe();
+        });
     }
 
     /**
      * Obtiene un producto por ID
      */
     getProduct(id: string): Observable<Product> {
-        const productDoc = doc(this.firestore, `products/${id}`);
-        return docData(productDoc, { idField: 'id' }) as Observable<Product>;
+        return new Observable(observer => {
+            const productDoc = doc(this.firestore, `products/${id}`);
+            const unsubscribe = onSnapshot(productDoc,
+                (snapshot) => {
+                    if (snapshot.exists()) {
+                        observer.next({ id: snapshot.id, ...snapshot.data() } as Product);
+                    } else {
+                        observer.error(new Error('Product not found'));
+                    }
+                },
+                (error) => {
+                    observer.error(error);
+                }
+            );
+            return () => unsubscribe();
+        });
     }
 
     /**
@@ -31,7 +59,8 @@ export class ProductService {
      */
     async addProduct(product: Product): Promise<any> {
         try {
-            const result = await addDoc(this.productsCollection, product);
+            const productsRef = collection(this.firestore, 'products');
+            const result = await addDoc(productsRef, product);
             return result;
         } catch (error) {
             throw error;
